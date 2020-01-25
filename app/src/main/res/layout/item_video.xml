@@ -19,4 +19,4 @@
         android:src="@drawable/ytplay"
         android:layout_centerInParent="true"/>
 
-</RelativeLayout>
+    </RelativeLayout>

@@ -45,13 +45,15 @@
                 android:text="Gundala"/>
 
         </LinearLayout>
+
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/tvOverview"
             android:layout_marginTop="10dp"
-            android:text="ererererererererererererer" />
-
+            android:text="ererererererererererererer"
+            />
         <ListView
             android:id="@+id/listViewVideo"
             android:layout_width="match_parent"
@@ -60,8 +62,10 @@
             android:divider="@android:color/transparent"/>
 
 
-        </LinearLayout>
-    </RelativeLayout>
 
+
+
+    </LinearLayout>
+    </RelativeLayout>
 
 </ScrollView>

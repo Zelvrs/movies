@@ -59,6 +59,7 @@ public class DetailActivity extends AppCompatActivity {
         tvTitle = findViewById(R.id.tvTitle);
         tvOverview = findViewById(R.id.tvOverview);
         mListView = findViewById(R.id.listViewVideo);
+        mListView.setFocusable(false);
 
         mVideoAdapter = new VIdeoAdapter(this, R.layout.item_video, mVideos);
         mListView.setAdapter(mVideoAdapter);

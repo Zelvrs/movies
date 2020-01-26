@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ProgressBar;
@@ -28,6 +29,11 @@ public class MainActivity extends AppCompatActivity {
     ArrayList<Movie> mMovies;
     CustomAdapter mCustomAdapter;
     ProgressBar mProgressBar;
+
+    private  int mPage = 1;
+    private boolean isLoading = false;
+    private  int mTotalPages = 0;
+
 
 
     @Override
@@ -62,7 +68,34 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        String url = "https://api.themoviedb.org/3/movie/popular?api_key=490bc3f8bd238721511d3c3c21b9e925&language=en-US&page=1";
+        mGridView.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+
+            }
+
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+
+                int threshold = totalItemCount -visibleItemCount;
+
+                if (firstVisibleItem >= threshold && totalItemCount > 0 && !isLoading && mPage <= mTotalPages) {
+
+                    mPage = mPage + 1;
+                    loadPage(mPage);
+
+                }
+            }
+        });
+
+        loadPage(mPage);
+
+    }
+
+    private  void loadPage(int page) {
+        String url = "https://api.themoviedb.org/3/movie/popular?api_key=490bc3f8bd238721511d3c3c21b9e925&language=en-US&page=" + page;
+
+        isLoading = true;
 
         OkHttpClient client = new OkHttpClient();
         final Request request = new Request.Builder()
@@ -79,10 +112,12 @@ public class MainActivity extends AppCompatActivity {
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 if (response.isSuccessful()) {
                     String json = response.body().string();
+                    Log.d("###", "onResponse: " + json);
 
                     try {
                         JSONObject jsonObject = new JSONObject(json);
 
+                        mTotalPages = jsonObject.getInt("total_pages");
                         JSONArray results = jsonObject.getJSONArray("results");
                         for (int index = 0; index < results.length(); index++) {
                             JSONObject result = results.getJSONObject(index);
@@ -103,6 +138,8 @@ public class MainActivity extends AppCompatActivity {
 
                                     mProgressBar.setVisibility(View.INVISIBLE);
                                     mGridView.setVisibility(View.VISIBLE);
+
+                                    isLoading = false;
                                 }
                             });
                         }
@@ -113,6 +150,5 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-
     }
 }

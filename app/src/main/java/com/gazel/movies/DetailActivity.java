@@ -1,6 +1,8 @@
 package com.gazel.movies;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -36,7 +38,9 @@ public class DetailActivity extends AppCompatActivity {
 
     ArrayList<Video> mVideos;
     ListView mListView;
+    RecyclerView mRecyclerView;
     VIdeoAdapter mVideoAdapter;
+    VideoRecyclerAdapter mVideoRecyclerAdapter;
 
 
 
@@ -60,9 +64,17 @@ public class DetailActivity extends AppCompatActivity {
         tvOverview = findViewById(R.id.tvOverview);
         mListView = findViewById(R.id.listViewVideo);
         mListView.setFocusable(false);
+        mRecyclerView = findViewById(R.id.recyclerView);
 
         mVideoAdapter = new VIdeoAdapter(this, R.layout.item_video, mVideos);
+        mVideoRecyclerAdapter = new VideoRecyclerAdapter(this, R.layout.item_video, mVideos);
+
         mListView.setAdapter(mVideoAdapter);
+        mRecyclerView.setAdapter(mVideoRecyclerAdapter);
+
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false);
+        mRecyclerView.setLayoutManager(layoutManager);
+
 
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -123,6 +135,7 @@ public class DetailActivity extends AppCompatActivity {
                                 @Override
                                 public void run() {
                                     mVideoAdapter.notifyDataSetChanged();
+                                    mVideoRecyclerAdapter.notifyDataSetChanged();
                                 }
                             });
                         }
